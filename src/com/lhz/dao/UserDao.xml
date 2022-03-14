@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhz.dao.UserDao">
+   
+   <select id="getUserByName" parameterType="String" resultType="User">
+   		select * from user where username=#{username}
+   </select>
+   
+    <select id="getUserById" parameterType="String" resultType="User">
+   		select * from user where uid=#{uid}
+   </select>
+   
+     <select id="getUserCount" parameterType="String" resultType="Long">
+   		select count(1) from user where nike like CONCAT('%',#{nike},'%')
+   </select>
+   
+   <select id="getUsers" resultType="User">
+   		select * from user where nike like CONCAT('%',#{nike},'%')
+   		limit #{indexRow},#{pageSize}
+   </select>
+   
+   <insert id="addUser" parameterType="User">
+ 		  insert into user(uid,username,password,phone,nike,utime,acount) 
+ 		  values(#{uid},#{username},#{password},#{phone},#{nike},#{utime},#{acount})
+   </insert>
+   
+   <update id="updateUser" parameterType="User">
+   		update user
+   		<set>
+   			<if test="password!=null">
+   				password = #{password},
+   			</if>
+   			<if test="nike!=null">
+   				nike=#{nike},
+   			</if>
+   			<if test="phone!=null">
+   				phone=#{phone},
+   			</if>
+   			<if test="acount!=null">
+   				acount=#{acount},
+   			</if>
+   		</set>
+   		where uid=#{uid}
+   </update>
+   
+   <delete id="deleteUser" parameterType="String">
+   		delete from user where uid=#{uid}
+   </delete>
+    
+    
+</mapper>

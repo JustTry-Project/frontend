@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhz.dao.FoodDao">
+    <select id="getFoodsByTid" parameterType="String" resultType="Food">
+    	select * from food where tid=#{tid}
+    </select>
+    
+    <select id="getFoodByName" parameterType="String" resultType="Food">
+    	select * from food where fname like CONCAT('%',#{fname},'%')
+    </select>
+    
+    <select id="getCount" parameterType="String" resultType="Long">
+    	select count(1) from food where fname like CONCAT('%',#{fname},'%')
+    </select>
+    
+    <select id="getFoods" resultType="Food">
+    	select * from food where fname  like CONCAT('%',#{fname},'%')
+    	limit #{indexRow},#{pageSize}
+    </select>
+    
+    <delete id="deleteFood" parameterType="String">
+    	delete from food where fid=#{fid}
+    </delete>
+    <update id="updateFoodBase" parameterType="Food">
+    	update food
+    	<set>
+    		<if test="fname!=null">
+    			fname=#{fname},
+    		</if>
+    		<if test="fprice!=null">
+    			fprice=#{fprice},
+    		</if>
+    		
+    		<if test="tid!=null">
+    			tid=#{tid},
+    		</if>
+    		<if test="fdesc!=null">
+    			fdesc=#{fdesc},
+    		</if>
+    	</set>
+    	where fid=#{fid}
+    </update>
+    
+    <insert id="addFood" parameterType="Food">
+    	insert into food(fid,fname,fpicture,fprice,fdesc,ftime,tid) 
+    	values(#{fid},#{fname},#{fpicture},#{fprice},#{fdesc},#{ftime},#{tid})
+    </insert>
+</mapper>

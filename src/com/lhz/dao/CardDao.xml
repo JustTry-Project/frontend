@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhz.dao.CardDao">
+
+	<resultMap type="Card" id="cards">
+		<id column="cid" property="cid"/>
+		<result column="uid" property="uid"/>
+		<result column="num" property="num"/>
+		<result column="tprice" property="tprice"/>
+		<result column="pay" property="pay"/>
+		<result column="ctime" property="ctime"/>
+		<association property="food" javaType="Food">
+			<id column="fid" property="fid"/>
+			<result column="fname" property="fname"/>
+			<result column="fpicture" property="fpicture"/>
+			<result column="fprice" property="fprice"/>
+			<result column="fdesc" property="fdesc"/>
+		</association>
+	</resultMap>
+
+	<insert id="addFood" parameterType="Card">
+		insert into card(cid,fid,num,uid,tprice,pay,ctime)
+		values(#{cid},#{fid},#{num},#{uid},#{tprice},#{pay},#{ctime})
+	</insert>
+	
+	<select id="getCardsByUser" parameterType="String" resultMap="cards">
+		select c.*,f.* from card c,food f where uid=#{uid} and c.fid=f.fid and pay='0'
+	</select>
+	
+	<update id="updateCardPay">
+		update card set pay='1' where uid=#{uid} and pay='0'
+	</update>
+	
+	<delete id="deleteCards">
+		delete from card where uid=#{uid} and pay='0'
+	</delete>
+	<delete id="deleteCardsById" parameterType="String">
+		delete from card where cid=#{cid}
+	</delete>
+	<select id="getFoodNum" parameterType="String" resultType="Long">
+		select count(1) from card where uid=#{uid} and pay='0'
+	</select>
+
+</mapper>

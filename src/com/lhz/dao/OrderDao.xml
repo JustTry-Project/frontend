@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhz.dao.OrderDao">
+	
+	<resultMap type="Orders" id="order">
+		<id column="oid" property="oid"/>
+		<result column="otime" property="otime"/>
+		<result column="wait" property="wait"/>
+		<result column="wstate" property="wstate"/>
+		<association property="card" javaType="Card">
+			<id column="cid" property="cid"/>
+			<result column="uid" property="uid"/>
+			<result column="num" property="num"/>
+			<result column="tprice" property="tprice"/>
+			<result column="pay" property="pay"/>
+			<result column="ctime" property="ctime"/>
+			<association property="food" javaType="Food">
+				<id column="fid" property="fid"/>
+				<result column="fname" property="fname"/>
+				<result column="fpicture" property="fpicture"/>
+				<result column="fprice" property="fprice"/>
+				<result column="fdesc" property="fdesc"/>
+			</association>
+		</association>
+		<association property="user" javaType="User">
+			<id column="uid" property="uid"/>
+			<result column="username" property="username"/>
+			<result column="nike" property="nike"/>
+			<result column="phone" property="phone"/>
+		</association>
+	</resultMap>
+	
+	<resultMap type="Orders" id="canHao">
+		<id column="wait" property="wait"/>
+		<result column="uid" property="uid"/>
+		<result column="otime" property="otime"/>
+		<result column="wstate" property="wstate"/>
+	</resultMap>
+	
+	<resultMap type="Orders" id="OrderPa">
+		<result column="wait" property="wait"/>
+		<result column="otime" property="otime"/>
+		<result column="wstate" property="wstate"/>
+		<association property="user" javaType="User">
+			<id column="uid" property="uid"/>
+			<result column="nike" property="nike"/>
+			<result column="phone" property="phone"/>
+		</association>
+	</resultMap>
+		
+	<insert id="addOrder" parameterType="Orders">
+		insert into orders(oid,cid,uid,otime,wait,wstate) 
+		values(#{oid},#{cid},#{uid},#{otime},#{wait},#{wstate})
+	</insert>
+	
+	<select id="getOrdersById" parameterType="String" resultMap="order">
+		select o.*,c.*,f.* 
+		from orders o,card c,food f
+		where o.uid = #{uid} and o.cid=c.cid and c.fid=f.fid
+	</select>
+	
+	<select id="getCanhaoById" parameterType="String" resultMap="canHao">
+		select wait,max(uid) uid,max(otime) otime,max(wstate) wstate 
+		from orders 
+		where wstate in ('0','1') and uid=#{uid} 
+		group by wait;
+	</select>
+	
+	<delete id="deleteOrder" parameterType="String">
+		delete from orders where oid=#{oid}
+	</delete>
+	
+	<select id="getCount" parameterType="String" resultType="Long">
+		select count(n.wait) 
+		from (select  wait,max(u.nike) 
+        from orders o, user u 
+		where o.uid=u.uid and u.nike like CONCAT('%',#{nike},'%')
+		group by wait
+		) n
+	</select>
+	
+	<select id="getOrdersPa" resultMap="OrderPa">
+		select o.wait,max(u.uid) uid,max(u.nike) nike,max(u.phone) phone,min(o.wstate) wstate,max(o.otime) otime  
+		from orders o,user u 
+		where o.uid=u.uid 
+		group by wait 
+		having nike like CONCAT('%',#{nike},'%') 
+		order by otime desc 
+		limit #{indexRow},#{pageSize}; 
+	</select>
+	
+	<select id="getOrders" resultMap="order">
+		select o.*,c.*,f.*,u.* 
+		from orders o,card c,food f,user u
+		where o.uid = u.uid and o.wait=#{wait} and o.cid=c.cid and c.fid=f.fid
+	</select>
+	<update id="updateOrder">
+		update orders set wstate=#{wstate} where oid=#{oid}
+	</update>
+	<update id="updateOrders">
+		update orders set wstate=#{wstate} where wait=#{wait}
+	</update>
+</mapper>
