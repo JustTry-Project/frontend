@@ -10,12 +10,12 @@
   <script src="${pageContext.request.contextPath }/js/jquery.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath }/css/bootstrap.min.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath }/css/index.css">
-  <title>分类</title>
+  <title>Classification</title>
   <style>
     h1{
       text-align: center;
       font-size: 24px;
-      background-color: crimson;
+      background-color: wheat;
       margin: 0;
       padding: 10px;
     }
@@ -31,6 +31,12 @@
     .search button{
       width: 18%;
       height: 30px;
+    }
+    .buy-food{
+      position: absolute;
+      margin-left: 5px;
+      background-color: rgb(100, 100, 100);
+      border: 1px solid rgb(90, 90, 90);
     }
   </style>
     <!-- 跳转 -->
@@ -63,7 +69,7 @@
        num++;
        $(item).prev().html(num);
      }else{
-       alert('亲！最多只能点20份。')
+       alert('You can only order 20 at most.')
      }
    }
 //食品删减按钮事件
@@ -73,7 +79,7 @@
         num--;
         $(item).next().html(num);
       }else{
-        alert('已经不能再减了，亲！')
+        alert('It cannot be reduced anymore!')
       }
     }
     
@@ -90,11 +96,11 @@
 		var tprice = $(item).parent().prev().children('.bom').children('.price').html()*num;
 		$.get('addCard?fid='+fid+'&num='+num+'&tprice='+tprice,{},function(data){
 			if(data.state==-1){
-				if(confirm("您尚未登录，要跳转到登录吗？")){
+				if(confirm("You haven't logged in yet. Do you want to jump to login?")){
 					 window.location.href = "toLogin"
 				}
 			}else if(data.state==0){
-				alert("添加菜单失败，请重新添加！")
+				alert("Failed to add menu, please add again!")
 			}else{
 				//定位菜单坐标
 				var width = $('.foot').width();
@@ -172,11 +178,11 @@
   </script>
 </head>
 <body>
-  <h1>菜品列表</h1>
+  <h1>Food List</h1>
   <div class="search">
     <div>
-      <button class="search-btn">搜索</button>
-      <input class="search-value" type="text" placeholder="请输入商品名称">
+      <button class="search-btn">Search</button>
+      <input class="search-value" type="text" placeholder="Please input food name">
     </div>
   </div>
   <!-- 所有菜品 -->
@@ -193,7 +199,7 @@
 	        <button class="food-del" onclick="del(this)">-</button>
 	        <span class="food-num">1</span>
 	        <button class="food-add" onclick="add(this)">+</button>
-	        <button class="buy-food" onclick="buyFood(this)">购买</button>
+	        <button class="buy-food" onclick="buyFood(this)">purchase</button>
 	        <input type="hidden" value="${food.fid }"/>
 	      </div>
 	    </div><hr>
@@ -204,19 +210,19 @@
   <div class="foot">
     <div onclick="index()">
       <img src="${pageContext.request.contextPath }/images/shou-ico.jpg" alt="shou-ico">
-      <span >主页</span>
+      <span >Home</span>
     </div>
     <div onclick="fenlei()">
       <img src="${pageContext.request.contextPath }/images/fen-ico.jpg" alt="shou-ico">
-      <span class="active">菜品</span>
+      <span class="active">Food</span>
     </div>
     <div onclick="menu()">
       <img src="${pageContext.request.contextPath }/images/caidan-ico.jpg" alt="shou-ico">
-      <span>菜单</span>
+      <span>Menu</span>
     </div>
     <div onclick="persion()">
       <img src="${pageContext.request.contextPath }/images/person-ico.jpg" alt="shou-ico">
-      <span>我的</span>
+      <span>Mine</span>
     </div>
   </div>
   <span class="tag">1</span>
