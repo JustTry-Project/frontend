@@ -9,48 +9,115 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
   <link rel="stylesheet" href="${pageContext.request.contextPath }/css/register.css">
   <script src="${pageContext.request.contextPath }/js/jquery.js"></script>
-  <title>注册</title>
+  <title>register</title>
   <style>
   	.index_a{
   		font-size:12px;
   		margin-left:20px;
   		text-decoration:none;
   	}
+      body{
+  margin: 0;
+  padding: 0;
+}
+.bg{
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  position: relative;
+}
+.content{
+  width: 350px;
+  height: 450px;
+  background-color: rgb(112,227,227);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-175px,-225px);
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px 3px rgb(196, 195, 195);
+}
+.content h2{
+  text-align: center;
+}
+.content .inp{
+  height: 30px;
+  width: 100%;
+  line-height: 30px;
+  margin-left: 10%;
+  margin-top: 20px;
+  padding: 5px;
+}
+.content .inp span{
+  width: 80px;
+  display: inline-block;
+  height: 25px;
+  line-height: 25px;
+}
+.content .inp input{
+  border: 1px solid #000;
+  padding-left: 8px;
+  height: 25px;
+  line-height: 25px;
+}
+
+.res{
+  width: 100%;
+  height: 35px;
+  margin-top: 20px;
+}
+.res input{
+  width: 50%;
+  margin-left: 25%;
+  height: 35px;
+  font-size: 16px;
+  border: none;
+  background-color: royalblue;
+  border-radius: 5px;
+  box-shadow: 1px 1px 8px 1px rgb(39, 89, 230);
+}
+.umsg,.pmsg,.cmsg,.tmsg,.nmsg{
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
   </style>
 </head>
 <body>
   <div class="bg">
     <div class="content">
-      <h2>注&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;册</h2>
+      <h2>Register</h2>
       <div class="inp">
-        <span>用&nbsp;&nbsp;户&nbsp;名&nbsp;：</span>
+        <span>username&nbsp;：</span>
         <input type="text" name="username"> 
       </div>
       <span class="umsg"></span>
       <div class="inp">
-        <span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</span>
+        <span>password&nbsp;：</span>
         <input type="password" name="password">
       </div>
       <span class="pmsg"></span>
       <div class="inp">
-        <span>确认密码：</span>
+        <span>confirm&nbsp;&nbsp;：</span>
         <input type="password" name="check">
       </div>
       <span class="cmsg"></span>
       <div class="inp">
-        <span>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：</span>
+        <span>phone&nbsp;&nbsp;&nbsp;&nbsp;：</span>
         <input type="text" name="phone">
       </div>
       <span class="tmsg"></span>
       <div class="inp">
-        <span>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</span>
+        <span>nickname&nbsp;：</span>
         <input type="text" name="nike">
       </div>
       <span class="nmsg"></span>
       <div class="res">
-        <input type="submit" value="提交" class="btn">
+        <input type="submit" value="submit" class="btn">
       </div>
-      <a class="index_a" href="${pageContext.request.contextPath }/user/index">首页</a>
+      <a class="index_a" href="${pageContext.request.contextPath }/user/index">home</a>
     </div>
   </div>
   <!-- 表单验证js -->
@@ -86,7 +153,7 @@
           $.get('checkUser?username='+this.value,{},function(data){
         	  if(data){
         		  uflag = false;
-                  $('.umsg').html("用户名已存在！");
+                  $('.umsg').html("User name already exists！");
         	  }else{
         		  uflag = true;
                   $('.umsg').html("")
@@ -94,7 +161,7 @@
           },'json')
         }else{
           uflag = false;
-          $('.umsg').html("用户名6~16位数字、字母、下划线组成");
+          $('.umsg').html("The user name is composed of 6 ~ 16 digits of numbers, letters and underscores!");
         }
       })
       //校验密码
@@ -104,7 +171,7 @@
           $('.pmsg').html("");
         }else{
           cflag = false;
-          $('.pmsg').html('密码为6~16位');
+          $('.pmsg').html('The password is 6 ~ 16 digits!');
         }
       })
       //确认密码
@@ -116,7 +183,7 @@
           $('.cmsg').html("");
         }else{
           pflag = false;
-          $('.cmsg').html("两次密码不一致！");
+          $('.cmsg').html("The two passwords are inconsistent!");
         }
       })
       //手机号验证
@@ -127,7 +194,7 @@
           $('.tmsg').html("");
         }else{
           tflag = false;
-          $('.tmsg').html("请输入正确的电话号码！");
+          $('.tmsg').html("Please enter the correct phone number!");
         }
       })
       //昵称不能为空
@@ -137,7 +204,7 @@
           $('.nmsg').html("");
         }else{
           nflag = false;
-          $('.nmsg').html("昵称不能为空！")
+          $('.nmsg').html("Nickname cannot be empty!")
         }
       })
     })
